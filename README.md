@@ -25,5 +25,3 @@ tanpa menjalankan game. Hook asal bisa crash atau tidak berefek. Jalankan sekali
 4. Flash di Magisk (Zygisk aktif), buka game sekali. Config dibuat di
    `/data/data/<package>/files/speed_companion.cfg` (bisa juga `/sdcard/Android/data/<package>/files/`).
 5. Edit config (`stage=3`, `unity_speed=2.0`, ...), berlaku ~2 dtk. Log: `speed_companion.log` / `adb logcat -s SpeedCompanion`.
-
-Belum pernah dikompilasi/dijalankan di device (tidak ada NDK di sandbox). Fitur online (raid/PvP/co-op) berisiko ban.
