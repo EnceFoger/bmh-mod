@@ -1,0 +1,6 @@
+id=speed_companion
+name=Speed Companion
+version=v0.1
+versionCode=1
+author=companion
+description=Zygisk module: Unity Speed, Game Speed, Damage Rate (discovery). Package game diisi di package.txt, setting di speed_companion.cfg.
