@@ -26,4 +26,3 @@ jobs:
           name: kuro_mirror_high
           path: kuro_mirror_high.zip
           if-no-files-found: error
-          
