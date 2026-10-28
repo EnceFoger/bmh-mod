@@ -1,5 +1,4 @@
 stage=3
 unity_speed=2.0
-dump=1
-damage_multiplier=2.0
+damage_rate=2.0
 god_mode=1

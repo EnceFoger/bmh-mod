@@ -4,22 +4,16 @@ Modul Zygisk untuk Bleach Mirrors High (`com.bandainamcoent.bleach_mh_ww`). Targ
 (tanpa offset), dikendalikan file teks, dengan log dan `stage` untuk diagnosa.
 
 ## Fitur
-- **Unity Speed** (`unity_speed`): mengalikan `UnityEngine.Time.timeScale`. Terbukti ter-hook di device (lihat log).
-  Batas default 5.0, naikkan dengan `max_unity_speed=10` (maks 100).
+- **Unity Speed** (`unity_speed`): mengalikan `UnityEngine.Time.timeScale`. Sudah terbukti jalan di device.
+  Batas default 5.0, naikkan dengan `max_unity_speed` (maks 100).
+- **Damage Rate** (`damage_rate`): damage yang dikeluarkan tim kamu dikali nilai ini (batas `max_damage_rate`, default 10).
+- **God Mode** (`god_mode=1`): tim kamu tidak menerima damage.
 
-- **Damage Multiplier** (`damage_multiplier`, 1.0 = off, 0.1 - 100): mengalikan `DamageSource.coefPermyriad` pada hit yang
-  mengenai sisi musuh (target bukan `isLocalTeam`). Hook: `Btl.CharacterUnit::SendDamage`.
-- **God Mode** (`god_mode=1`): hit yang mengenai tim lokal dibuang, dan `Btl.CharacterUnit::IsDead` tidak pernah true untuk tim lokal.
-
-Catatan: rumus damage asli game ter-obfuscate dan belum terlihat di dump. Efek `damage_multiplier` bergantung pada
-apakah game memakai `coefPermyriad` saat menghitung damage. Log `damage:` / `god_mode:` mencatat tiap hit pertama untuk verifikasi.
-
-Game Speed belum ada: `get_BattleSpeedRate` di game ini ternyata setting tersimpan bertipe Int32
-(`Dimps.Alma.GameData.LocalData`), bukan pengali kecepatan, dan target damage belum bisa dipastikan.
-`dump=1` hanya menulis daftar method terkait ke log (tidak mengubah gameplay) untuk mencari target yang benar.
+Damage Rate dan God Mode memakai satu hook di `Btl.CharacterUnit::SendDamage`, yang mengubah
+`DamageSource.coefPermyriad` (10000 = 100%) sebelum method asli jalan. Belum terbukti di device:
+cek log, baris `battle: SendDamage attackerLocal=.. targetLocal=.. coef A -> B`.
 
 ## Pakai
-1. Upload isi zip ke repo GitHub (flat). Pindahkan `build.yml.txt` ke `.github/workflows/build.yml`.
-2. Jalankan workflow (Actions -> Run workflow), unduh artifact `kuro_mirror_high.zip`, flash (Zygisk aktif).
-3. Buat `/sdcard/Android/data/com.bandainamcoent.bleach_mh_ww/files/kuro_mirror_high.cfg`:
-   `stage=3` dan `unity_speed=2.0`. Restart game. Log: `kuro_mirror_high.log` di folder yang sama.
+1. Upload isi zip ke repo GitHub (flat), jalankan workflow, flash artifact `kuro_mirror_high.zip`, reboot.
+2. Config di `/sdcard/Android/data/com.bandainamcoent.bleach_mh_ww/files/kuro_mirror_high.cfg`:
+   `stage=3`, `unity_speed=2.0`, `damage_rate=2.0`, `god_mode=1`. Restart game. Log: `kuro_mirror_high.log`.

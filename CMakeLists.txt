@@ -17,7 +17,7 @@ endforeach()
 add_library(kuro_mirror_high SHARED
     main.cpp worker.cpp config.cpp log.cpp
     il2cpp_api.cpp resolver.cpp hook_util.cpp
-    unity_speed.cpp damage.cpp diag.cpp
+    unity_speed.cpp battle.cpp diag.cpp
     And64InlineHook.cpp)
 
 target_include_directories(kuro_mirror_high PRIVATE ${CMAKE_SOURCE_DIR})
