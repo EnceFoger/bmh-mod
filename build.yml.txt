@@ -1,4 +1,4 @@
-name: Build Speed Companion
+name: Build Kuro Mirror High
 on:
   workflow_dispatch:
 jobs:
@@ -23,6 +23,6 @@ jobs:
           ./build.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: speed_companion
-          path: speed_companion.zip
+          name: kuro_mirror_high
+          path: kuro_mirror_high.zip
           if-no-files-found: error

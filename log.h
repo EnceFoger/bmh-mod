@@ -1,7 +1,7 @@
 #pragma once
 #include <android/log.h>
 
-#define LOG_TAG "SpeedCompanion"
+#define LOG_TAG "KuroMirrorHigh"
 
 // Writes to logcat and, once klog_set_paths() was called, to up to two log files.
 void klog_set_paths(const char* path_a, const char* path_b);

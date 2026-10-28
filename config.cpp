@@ -15,7 +15,7 @@ static std::string s_path, s_over, s_used;
 static long long s_stamp = -1;
 
 static const char* kDefaultFile =
-    "# Speed Companion settings. Re-read automatically every ~2 seconds.\n"
+    "# Kuro Mirror High settings. Re-read automatically every ~2 seconds.\n"
     "# 1.0 = feature off.\n"
     "stage=1                 # 0 idle | 1 find API | 2 find methods, no hooks | 3 full (set 3 to use features)\n"
     "unity_speed=1.0         # all Time.timeScale requests (menus included)\n"

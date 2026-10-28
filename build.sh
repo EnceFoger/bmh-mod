@@ -14,7 +14,7 @@ cmake --build build -j"$(nproc 2>/dev/null || echo 4)"
 rm -rf dist
 mkdir -p dist/zygisk dist/META-INF/com/google/android
 cp module.prop package.txt dist/
-cp build/libspeed_companion.so dist/zygisk/arm64-v8a.so
+cp build/libkuro_mirror_high.so dist/zygisk/arm64-v8a.so
 "$ANDROID_NDK"/toolchains/llvm/prebuilt/*/bin/llvm-strip --strip-unneeded dist/zygisk/arm64-v8a.so || true
 
 cat > dist/META-INF/com/google/android/update-binary <<'EOS'
@@ -38,7 +38,7 @@ exit 0
 EOS
 echo "#MAGISK" > dist/META-INF/com/google/android/updater-script
 
-rm -f speed_companion.zip
-( cd dist && zip -r ../speed_companion.zip META-INF module.prop package.txt zygisk >/dev/null )
-unzip -l speed_companion.zip
-echo "Built: $(pwd)/speed_companion.zip"
+rm -f kuro_mirror_high.zip
+( cd dist && zip -r ../kuro_mirror_high.zip META-INF module.prop package.txt zygisk >/dev/null )
+unzip -l kuro_mirror_high.zip
+echo "Built: $(pwd)/kuro_mirror_high.zip"
