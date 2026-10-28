@@ -1,11 +1,11 @@
 # Kuro Mirror High (Zygisk)
 
-Konsep sama seperti Kuro Companion: modul Zygisk terpisah, target dicari lewat NAMA saat runtime (tanpa offset),
-dikendalikan file teks, log + `stage` untuk diagnosa. Dianalisis dari `libil2cpp.so` + `global-metadata.dat` (v39) yang kamu kirim.
+Modul Zygisk terpisah: target dicari lewat NAMA saat runtime (tanpa offset),
+dikendalikan file teks, dengan log dan `stage` untuk diagnosa. Dianalisis dari `libil2cpp.so` + `global-metadata.dat` (v39) yang kamu kirim.
 
-## Penting: build ini BUKAN build yang dipakai Kuro
-Di metadata ini tidak ada `Bleach.Games.*`, `CalculateDamageUpRate`, `GameTimeManager` dll. (target Kuro Companion lama
-pasti "NOT FOUND"). Namespace game di sini beda (mis. `ALMA.*`), jadi fitur lama tidak dipakai ulang.
+## Catatan target
+Metadata ini tidak memuat namespace `Bleach.Games.*` maupun nama seperti `CalculateDamageUpRate` atau
+`GameTimeManager`. Namespace game di sini berbeda (mis. `ALMA.*`), jadi semua target dicari ulang dari metadata ini.
 
 ## Fitur
 | Fitur | Target | Status |

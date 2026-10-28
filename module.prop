@@ -2,5 +2,5 @@ id=kuro_mirror_high
 name=Kuro Mirror High
 version=v0.1
 versionCode=1
-author=companion
+author=kuro
 description=Zygisk module: Unity Speed, Game Speed, Damage Rate (discovery). Package game diisi di package.txt, setting di kuro_mirror_high.cfg.
