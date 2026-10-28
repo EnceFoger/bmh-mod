@@ -8,10 +8,14 @@
 namespace {
 int logged = 0;
 bool pred(const char* n) {
-    static const char* names[] = {"SendDamage", "OnReceivedDamage", "ReceivedDamage", "RegisterDamage", "SetDamageValue",
-                                  "OnReceiveNormalDamage", "CalcRate", "ApplyDamageReaction"};
-    for (auto* s : names) if (strcmp(n, s) == 0) return true;
-    return strstr(n, "TimeScale") || strstr(n, "SpeedRate") || strstr(n, "BattleSpeed") || strstr(n, "GameSpeed");
+    static const char* skip[] = {"Popup", "Gauge", "Text", "Anim", "Sprite", "Icon", "Effect", "View", "Cell", "Button", "Sound", "Voice", "Log"};
+    static const char* keys[] = {"Damage", "Immortal", "Invincible", "SetCurrentHp", "SetCurrentHP", "SetReserveHP", "IsDead",
+                                 "IsDefeated", "TimeScale", "SpeedRate", "BattleSpeed", "GameSpeed"};
+    bool hit = false;
+    for (auto* k : keys) if (strstr(n, k)) { hit = true; break; }
+    if (!hit) return false;
+    for (auto* s : skip) if (strstr(n, s)) return false;
+    return true;
 }
 void cb(void* klass, void* method, void* image) {
     if (strncmp(il2cpp::image_name_of(image), "Assembly-CSharp", 15) != 0) return;
@@ -25,7 +29,8 @@ void cb(void* klass, void* method, void* image) {
         if (il2cpp::api.method_get_param_name) { sig += " "; const char* pn = il2cpp::api.method_get_param_name(method, i); sig += pn ? pn : "?"; }
     }
     std::string ret = il2cpp::type_name(il2cpp::api.method_get_return_type(method));
-    LOGI("dump: %s.%s::%s(%s) -> %s", ns ? ns : "", cn, il2cpp::api.method_get_name(method), sig.c_str(), ret.c_str());
+    uint32_t fl = il2cpp::api.method_get_flags(method, nullptr);
+    LOGI("dump: %s.%s::%s(%s) -> %s%s", ns ? ns : "", cn, il2cpp::api.method_get_name(method), sig.c_str(), ret.c_str(), (fl & 0x10) ? " [static]" : "");
     ++logged;
 }
 }  // namespace
