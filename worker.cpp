@@ -28,8 +28,7 @@ void worker_main(std::string config_path) {
     if (!il2cpp::wait_until_ready(180)) { LOGE("IL2CPP not ready"); return idle_loop(); }
     const bool dry = stage < 3;
     report("unity_speed", features::install_unity_speed(dry), dry);
-    report("game_speed",  features::install_game_speed(dry), dry);
-    features::dump_damage_candidates();
+    features::dump_candidates();
     LOGI(dry ? "stage 2 done: probe only" : "stage 3 done: hooks installed");
     idle_loop();
 }

@@ -19,10 +19,8 @@ static const char* kDefaultFile =
     "# 1.0 = feature off.\n"
     "stage=1                 # 0 idle | 1 find API | 2 find methods, no hooks | 3 full (set 3 to use features)\n"
     "unity_speed=1.0         # all Time.timeScale requests (menus included)\n"
-    "game_speed=1.0          # game's own battle speed rate (BattleSpeedRate)\n"
-    "damage_dump=0           # diagnostic: 1 = write damage-related method list to the log (no effect on gameplay)\n"
-    "max_unity_speed=5.0\n"
-    "max_game_speed=5.0\n"
+    "dump=0                  # diagnostic: 1 = write speed/damage-related game methods to the log (no effect on gameplay)\n"
+    "max_unity_speed=5.0     # raise this (max 100) to allow unity_speed above 5\n"
     ;
 
 void set_path(const std::string& p) { s_path = p; }
@@ -70,8 +68,8 @@ void reload_if_changed() {
     std::ifstream in(path); if (!in) return;
     s_stamp = stamp;
 
-    g.unity_speed = 1.f; g.game_speed = 1.f; g.damage_dump = false;
-    g.max_unity_speed = g.max_game_speed = kDefaultMax;
+    g.unity_speed = 1.f; g.dump = false;
+    g.max_unity_speed = kDefaultMax;
     std::string line;
     while (std::getline(in, line)) {
         size_t h = line.find('#'); if (h != std::string::npos) line.erase(h);
@@ -79,17 +77,14 @@ void reload_if_changed() {
         std::string k = trim(line.substr(0, eq)), v = trim(line.substr(eq + 1));
         float f; bool b;
         if      (k == "unity_speed" && parse_float(v, f)) g.unity_speed = f;
-        else if (k == "game_speed"  && parse_float(v, f)) g.game_speed = f;
-        else if (k == "damage_dump" && parse_bool(v, b))  g.damage_dump = b;
+        else if ((k == "dump" || k == "damage_dump") && parse_bool(v, b)) g.dump = b;
         else if (k == "max_unity_speed") g.max_unity_speed = parse_max(k, v);
-        else if (k == "max_game_speed")  g.max_game_speed = parse_max(k, v);
         else if (k == "stage") { char* e = nullptr; long x = strtol(v.c_str(), &e, 10); if (e != v.c_str()) g.stage = (int)std::min(3L, std::max(0L, x)); }
         else LOGW("config: ignored line '%s=%s'", k.c_str(), v.c_str());
     }
     clamp_to(g.unity_speed, g.max_unity_speed.load());
-    clamp_to(g.game_speed, g.max_game_speed.load());
     g.revision.fetch_add(1);
-    LOGI("config loaded: stage=%d unity_speed=%.1f game_speed=%.1f damage_dump=%d",
-         g.stage.load(), g.unity_speed.load(), g.game_speed.load(), (int)g.damage_dump.load());
+    LOGI("config loaded: stage=%d unity_speed=%.1f dump=%d",
+         g.stage.load(), g.unity_speed.load(), (int)g.dump.load());
 }
 }  // namespace cfg
