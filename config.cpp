@@ -21,6 +21,8 @@ static const char* kDefaultFile =
     "unity_speed=1.0         # all Time.timeScale requests (menus included)\n"
     "dump=0                  # diagnostic: 1 = write speed/damage-related game methods to the log (no effect on gameplay)\n"
     "max_unity_speed=5.0     # raise this (max 100) to allow unity_speed above 5\n"
+    "damage_multiplier=1.0   # damage dealt to the enemy side x this (1.0 = off, 0.1 - 100)\n"
+    "god_mode=0             # 1 = your team takes no damage and is never counted as dead (0 = off)\n"
     ;
 
 void set_path(const std::string& p) { s_path = p; }
@@ -69,6 +71,7 @@ void reload_if_changed() {
     s_stamp = stamp;
 
     g.unity_speed = 1.f; g.dump = false;
+    g.damage_multiplier = 1.f; g.god_mode = false;
     g.max_unity_speed = kDefaultMax;
     std::string line;
     while (std::getline(in, line)) {
@@ -79,12 +82,16 @@ void reload_if_changed() {
         if      (k == "unity_speed" && parse_float(v, f)) g.unity_speed = f;
         else if ((k == "dump" || k == "damage_dump") && parse_bool(v, b)) g.dump = b;
         else if (k == "max_unity_speed") g.max_unity_speed = parse_max(k, v);
+        else if (k == "damage_multiplier" && parse_float(v, f)) g.damage_multiplier = f;
+        else if (k == "god_mode" && parse_bool(v, b)) g.god_mode = b;
         else if (k == "stage") { char* e = nullptr; long x = strtol(v.c_str(), &e, 10); if (e != v.c_str()) g.stage = (int)std::min(3L, std::max(0L, x)); }
         else LOGW("config: ignored line '%s=%s'", k.c_str(), v.c_str());
     }
     clamp_to(g.unity_speed, g.max_unity_speed.load());
+    clamp_to(g.damage_multiplier, kHardMax);
     g.revision.fetch_add(1);
-    LOGI("config loaded: stage=%d unity_speed=%.1f dump=%d",
-         g.stage.load(), g.unity_speed.load(), (int)g.dump.load());
+    LOGI("config loaded: stage=%d unity_speed=%.1f dump=%d damage_multiplier=%.1f god_mode=%d",
+         g.stage.load(), g.unity_speed.load(), (int)g.dump.load(),
+         g.damage_multiplier.load(), (int)g.god_mode.load());
 }
 }  // namespace cfg
