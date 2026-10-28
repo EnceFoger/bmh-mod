@@ -37,6 +37,11 @@ struct Api {
     const char*  (*class_get_namespace)(void* klass);
     const char*  (*method_get_name)(void* method);
     uint32_t     (*method_get_param_count)(void* method);
+    void*        (*class_get_fields)(void* klass, void** iter);
+    const char*  (*field_get_name)(void* field);
+    void*        (*class_get_parent)(void* klass);
+    bool         (*class_is_valuetype)(void* klass);
+    int32_t      (*class_instance_size)(void* klass);
     const char*  (*method_get_param_name)(void* method, uint32_t index);
 };
 

@@ -125,6 +125,11 @@ bool load_api(const LibRef& lib) {
     opt("il2cpp_class_get_namespace",       api.class_get_namespace);
     opt("il2cpp_method_get_name",           api.method_get_name);
     opt("il2cpp_method_get_param_count",    api.method_get_param_count);
+    opt("il2cpp_class_get_fields",          api.class_get_fields);
+    opt("il2cpp_field_get_name",            api.field_get_name);
+    opt("il2cpp_class_get_parent",          api.class_get_parent);
+    opt("il2cpp_class_is_valuetype",        api.class_is_valuetype);
+    opt("il2cpp_class_instance_size",       api.class_instance_size);
     opt("il2cpp_method_get_param_name",     api.method_get_param_name);
     return ok;
 }
