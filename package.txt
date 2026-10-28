@@ -1,2 +1,2 @@
-# Isi satu baris: package name game target (cek: pm list packages | grep -i <nama game>)
-GANTI.DENGAN.PACKAGE.GAME
+# Package game target (satu baris)
+com.bandainamcoent.bleach_mh_ww

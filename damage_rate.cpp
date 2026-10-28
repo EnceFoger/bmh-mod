@@ -4,7 +4,7 @@
 #include "il2cpp_api.h"
 #include "log.h"
 
-// Damage Rate Up - DISCOVERY ONLY in this build.
+// Diagnostic only (not a feature): lists damage-related methods in the log when damage_dump=1.
 // The metadata has several damage-related methods (SendDamage, OnReceivedDamage, RegisterDamage,
 // SetDamageValue, ...) but which one carries the final damage number, and with what parameter types,
 // cannot be verified without running the game. A wrong hook would crash or do nothing, so nothing is
@@ -35,10 +35,9 @@ void cb(void* klass, void* method, void* image) {
 }
 }  // namespace
 
-bool features::install_damage_rate(bool) {
-    if (!cfg::g.damage_dump.load()) { LOGI("damage_rate: discovery off (damage_dump=0), nothing hooked"); return false; }
+void features::dump_damage_candidates() {
+    if (!cfg::g.damage_dump.load()) return;
     logged = 0;
-    if (!il2cpp::scan_methods(pred, cb, 400)) return false;
-    LOGI("damage_rate: %d candidates logged - NOT hooked (discovery only)", logged);
-    return logged > 0;
+    if (!il2cpp::scan_methods(pred, cb, 400)) return;
+    LOGI("damage_dump: %d candidates logged (diagnostic, nothing hooked)", logged);
 }

@@ -1,29 +1,23 @@
 # Kuro Mirror High (Zygisk)
 
-Modul Zygisk terpisah: target dicari lewat NAMA saat runtime (tanpa offset),
-dikendalikan file teks, dengan log dan `stage` untuk diagnosa. Dianalisis dari `libil2cpp.so` + `global-metadata.dat` (v39) yang kamu kirim.
-
-## Catatan target
-Metadata ini tidak memuat namespace `Bleach.Games.*` maupun nama seperti `CalculateDamageUpRate` atau
-`GameTimeManager`. Namespace game di sini berbeda (mis. `ALMA.*`), jadi semua target dicari ulang dari metadata ini.
+Modul Zygisk untuk Bleach Mirrors High (`com.bandainamcoent.bleach_mh_ww`). Target dicari lewat NAMA saat runtime
+(tanpa offset), dikendalikan file teks, dengan log dan `stage` untuk diagnosa.
 
 ## Fitur
 | Fitur | Target | Status |
 |---|---|---|
-| Unity Speed | `UnityEngine.Time.set_timeScale` (+ `get_deltaTime`) | nama ada di metadata, mekanisme sama dengan Kuro |
-| Game Speed | `get_BattleSpeedRate()` milik game (class dicari otomatis, harus return `System.Single`) | nama ada di metadata, efek belum terbukti |
-| Damage Rate Up | kandidat: `SendDamage`, `OnReceivedDamage`, `RegisterDamage`, `SetDamageValue`, ... | **hanya discovery**: dicatat ke log, TIDAK di-hook |
+| Unity Speed (`unity_speed`) | `UnityEngine.Time.set_timeScale` (+ `get_deltaTime`) | nama ada di metadata, belum dites di device |
+| Game Speed (`game_speed`) | `get_BattleSpeedRate()` milik game (class dicari otomatis, harus return `System.Single`) | nama ada di metadata, efek belum terbukti |
 
-Kenapa damage belum di-hook: ada banyak method "damage" dan tidak bisa diverifikasi mana yang membawa angka final
-tanpa menjalankan game. Hook asal bisa crash atau tidak berefek. Jalankan sekali (stage=2 atau 3), kirim isi
-`kuro_mirror_high.log` (baris `damage candidate:`), lalu target satu method itu bisa dipasang dengan benar.
+Damage rate tidak ada di modul ini: target method-nya belum bisa dipastikan. `damage_dump=1` hanya menulis daftar
+kandidat ke log (tidak mengubah gameplay) supaya target yang benar bisa ditentukan.
 
 ## Pakai
-1. Upload isi zip ke repo GitHub. Semua file flat; `build.yml.txt` dipindah ke `.github/workflows/build.yml`.
+1. Upload isi zip ke repo GitHub (flat). Pindahkan `build.yml.txt` ke `.github/workflows/build.yml`.
 2. Jalankan workflow (Actions -> Run workflow), unduh artifact `kuro_mirror_high.zip`.
-3. Isi `package.txt` (di zip, atau setelah flash di `/data/adb/modules/kuro_mirror_high/package.txt`) dengan package game.
-4. Flash di Magisk (Zygisk aktif), buka game sekali. Config dibuat di
-   `/data/data/<package>/files/kuro_mirror_high.cfg` (bisa juga `/sdcard/Android/data/<package>/files/`).
-5. Edit config (`stage=3`, `unity_speed=2.0`, ...), berlaku ~2 dtk. Log: `kuro_mirror_high.log` / `adb logcat -s KuroMirrorHigh`.
+3. Flash di Magisk (Zygisk aktif), buka game sekali. Config dibuat di
+   `/data/data/com.bandainamcoent.bleach_mh_ww/files/kuro_mirror_high.cfg`
+   (atau buat sendiri di `/sdcard/Android/data/com.bandainamcoent.bleach_mh_ww/files/`).
+4. Edit config (`stage=3`, `unity_speed=2.0`, `game_speed=2.0`), berlaku ~2 dtk. Lihat log: `adb logcat -s KuroMirrorHigh`.
 
-Belum pernah dikompilasi/dijalankan di device (tidak ada NDK di sandbox). Fitur online (raid/PvP/co-op) berisiko ban.
+Belum pernah dikompilasi/dijalankan di device (tidak ada NDK di sandbox).

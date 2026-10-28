@@ -29,7 +29,7 @@ void worker_main(std::string config_path) {
     const bool dry = stage < 3;
     report("unity_speed", features::install_unity_speed(dry), dry);
     report("game_speed",  features::install_game_speed(dry), dry);
-    report("damage_rate", features::install_damage_rate(dry), dry);
+    features::dump_damage_candidates();
     LOGI(dry ? "stage 2 done: probe only" : "stage 3 done: hooks installed");
     idle_loop();
 }
