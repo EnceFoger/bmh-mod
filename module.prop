@@ -1,6 +1,6 @@
 id=kuro_mirror_high
 name=Kuro Mirror High
-version=v0.3
-versionCode=3
+version=v0.4
+versionCode=4
 author=kuro
 description=Zygisk module: Unity Speed, Damage Rate, God Mode untuk Bleach Mirrors High. Setting di kuro_mirror_high.cfg.

@@ -12,7 +12,7 @@ struct Settings {
     std::atomic<float> max_unity_speed{5.0f};
     std::atomic<unsigned> revision{0};
     // 0 idle | 1 find libil2cpp + API | 2 + find/probe methods, NO hooks | 3 full
-    std::atomic<int> stage{1};
+    std::atomic<int> stage{3};
 };
 extern Settings g;
 void set_path(const std::string& path);

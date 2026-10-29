@@ -15,5 +15,6 @@ cek log, baris `battle: SendDamage attackerLocal=.. targetLocal=.. coef A -> B`.
 
 ## Pakai
 1. Upload isi zip ke repo GitHub (flat), jalankan workflow, flash artifact `kuro_mirror_high.zip`, reboot.
-2. Config di `/sdcard/Android/data/com.bandainamcoent.bleach_mh_ww/files/kuro_mirror_high.cfg`:
-   `stage=3`, `unity_speed=2.0`, `damage_rate=2.0`, `god_mode=1`. Restart game. Log: `kuro_mirror_high.log`.
+2. Buka game sekali: `kuro_mirror_high.cfg` dibuat otomatis (stage=3) di
+   `/sdcard/Android/data/com.bandainamcoent.bleach_mh_ww/files/`. Edit `unity_speed`, `damage_rate`, `god_mode`,
+   lalu restart game. Log: `kuro_mirror_high.log` di folder yang sama.

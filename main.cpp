@@ -52,7 +52,7 @@ public:
         cfg::set_override_path(ext + kConfigName);
         cfg::ensure_default_file();
         cfg::reload_if_changed();
-        LOGI("Kuro Mirror High v0.3 loaded into %s, stage=%d", target_.c_str(), cfg::g.stage.load());
+        LOGI("Kuro Mirror High v0.4 loaded into %s, stage=%d", target_.c_str(), cfg::g.stage.load());
         if (cfg::g.stage.load() == 0) { LOGI("stage 0: idle"); return; }
         std::thread(worker_main, config_path_).detach();
     }

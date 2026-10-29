@@ -17,7 +17,7 @@ static long long s_stamp = -1;
 static const char* kDefaultFile =
     "# Kuro Mirror High settings. Re-read automatically every ~2 seconds.\n"
     "# 1.0 = feature off.\n"
-    "stage=1                 # 0 idle | 1 find API | 2 find methods, no hooks | 3 full (set 3 to use features)\n"
+    "stage=3                 # 3 = full (default) | 0 idle | 1 find API | 2 find methods, no hooks\n"
     "unity_speed=1.0         # all Time.timeScale requests (menus included)\n"
     "damage_rate=1.0        # damage you deal x this (1.0 = off)\n"
     "god_mode=0             # 1 = your team takes no damage\n"
@@ -52,13 +52,31 @@ static float parse_max(const std::string& k, const std::string& v) {
 }
 static void clamp_to(std::atomic<float>& v, float lim) { v.store(std::max(kMin, std::min(lim, v.load()))); }
 
+static void mkdirs(const std::string& file_path) {
+    size_t sl = file_path.find_last_of('/');
+    if (sl == std::string::npos) return;
+    std::string dir = file_path.substr(0, sl);
+    for (size_t i = 1; i <= dir.size(); ++i)
+        if (i == dir.size() || dir[i] == '/') mkdir(dir.substr(0, i).c_str(), 0771);   // EEXIST is fine
+}
+static bool make_default(const std::string& p) {
+    if (p.empty()) return false;
+    mkdirs(p);
+    std::ofstream f(p);
+    if (!f) return false;
+    f << kDefaultFile;
+    f.flush();
+    if (!f) return false;
+    LOGI("created default config: %s", p.c_str());
+    return true;
+}
+
+// Creates the default config when none exists yet: first in the user-editable external folder
+// (/sdcard/Android/data/<pkg>/files), otherwise in the app's internal folder.
 void ensure_default_file() {
-    if (s_path.empty() || access(s_path.c_str(), F_OK) == 0) return;
-    size_t sl = s_path.find_last_of('/');
-    if (sl != std::string::npos) mkdir(s_path.substr(0, sl).c_str(), 0771);
-    std::ofstream f(s_path);
-    if (f) { f << kDefaultFile; LOGI("created default config: %s", s_path.c_str()); }
-    else LOGW("could not create default config at %s", s_path.c_str());
+    if ((!s_over.empty() && access(s_over.c_str(), F_OK) == 0) || (!s_path.empty() && access(s_path.c_str(), F_OK) == 0)) return;
+    if (make_default(s_over)) return;
+    if (!make_default(s_path)) LOGW("could not create default config (external: %s, internal: %s)", s_over.c_str(), s_path.c_str());
 }
 
 void reload_if_changed() {
@@ -71,7 +89,7 @@ void reload_if_changed() {
     std::ifstream in(path); if (!in) return;
     s_stamp = stamp;
 
-    g.unity_speed = 1.f; g.damage_rate = 1.f; g.god_mode = false; g.dump = false;
+    g.stage = 3; g.unity_speed = 1.f; g.damage_rate = 1.f; g.god_mode = false; g.dump = false;
     g.max_unity_speed = kDefaultMax; g.max_damage_rate = 10.0f;
     std::string line;
     while (std::getline(in, line)) {
